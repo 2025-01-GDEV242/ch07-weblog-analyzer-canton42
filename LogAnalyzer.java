@@ -24,7 +24,18 @@ public class LogAnalyzer
         // Create the reader to obtain the data.
         reader = new LogfileReader(filename);
     }
-
+    
+    /**
+     * Return the number of accesses recorded in the log file.
+     */
+    public int numberOfAccesses() {
+        int total = 0;
+        for (int hourCount : hourCounts) {
+            total += hourCount;
+        }
+        return total;
+    }
+    
     /**
      * Analyze the hourly access data from the log file.
      */
