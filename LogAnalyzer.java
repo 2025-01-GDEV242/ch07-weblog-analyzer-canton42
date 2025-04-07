@@ -73,6 +73,26 @@ public class LogAnalyzer
     }
     
     /**
+     * Returns the busiest two-hour period recorded.
+     * 
+     * @return the first hour of the busiest two-hour period.
+     */
+    public int busiestTwoHour() {
+        int count = 0;
+        int max = 0;
+        for (int index = 0; index < hourCounts.length; index++) {
+            int nextIndex = (index + 1) % 24;
+            int total = hourCounts[index] + hourCounts[nextIndex];
+            if (total > max) {
+                max = total;
+                count = index;
+            }
+        }
+        return count;
+        
+    }
+    
+    /**
      * Analyze the hourly access data from the log file.
      */
     public void analyzeHourlyData()
