@@ -6,7 +6,7 @@ import java.util.Calendar;
  * Individual fields are made available via
  * accessors such as getHour() and getMinute().
  * 
- * Extra Credit: adds methods for daily and monthy values.
+ * Extra Credit: adds getter methods for daily and monthy values.
  * 
  * @author Nolan Canto
  * @version    2025.04.07

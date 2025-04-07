@@ -3,7 +3,13 @@
  * 
  * Extra Credit Branch - the following methods have been added to this branch:
  * 
- * 
+ * quietestDay - returns the quietest day
+ * busiestDay - returns the busiest day
+ * totalAccessesPerMonth - returns the total accesses per month
+ * quietestMonth - returns the quietest month
+ * busiestMonth - returns the busiest month
+ * averageAccessesPerMonth - returns the average accesses per month 
+ * across all years.
  * 
  * @author Nolan Canto
  * @version    2025.04.07
@@ -16,6 +22,8 @@ public class LogAnalyzer
     private LogfileReader reader;
     // Where to calculate the daily access counts.
     private int[] dayCounts;
+    // Where to calculate the monthy access counts.
+    private int[] monthCounts;
 
     /**
      * Create an object to analyze hourly web accesses.
@@ -24,10 +32,11 @@ public class LogAnalyzer
      */
     public LogAnalyzer(String filename)
     { 
-        // Create the array object to hold the hourly and daily
+        // Create the array object to hold the hourly, daily, and monthly
         // access counts.
         hourCounts = new int[24];
         dayCounts = new int[28];
+        monthCounts = new int[12];
         // Create the reader to obtain the data.
         reader = new LogfileReader(filename);
     }
@@ -59,7 +68,20 @@ public class LogAnalyzer
     }
     
     /**
-     * Returns the busiest hour recorded.
+     * Returns average accesses for an entire 28-day month across all years.
+     * 
+     * @return average accesses in month.
+     */
+    public double averageAccessesPerMonth() {
+        int total = 0;
+        for (int count : monthCounts) {
+            total += count;
+        }
+        return total / 12.0;
+    }
+    
+    /**
+     * Returns the busiest recorded hour.
      * 
      * @return busiest hour.
      */
@@ -76,7 +98,7 @@ public class LogAnalyzer
     }
     
     /**
-     * Returns the quietest hour recorded.
+     * Returns the quietest recorded hour.
      * 
      * @return quietest hour.
      */
@@ -93,7 +115,7 @@ public class LogAnalyzer
     }
     
     /**
-     * Returns the busiest day recorded.
+     * Returns the busiest recorded day.
      * 
      * @return busiest day.
      */
@@ -108,9 +130,9 @@ public class LogAnalyzer
         }
         return count;
     }
-    
+     
     /**
-     * Returns the quietest day recorded.
+     * Returns the quietest recorded day.
      * 
      * @return quietest day.
      */
@@ -125,6 +147,41 @@ public class LogAnalyzer
         }
         return count;
     }
+    
+    /**
+     * Returns the busiest recorded month.
+     * 
+     * @return busiest month.
+     */
+    public int busiestMonth() {
+        int count = 0;
+        int max = monthCounts[0];
+        for (int index = 1; index < monthCounts.length; index++) {
+            if (monthCounts[index] > max) {
+                max = monthCounts[index];
+                count = index;
+            }
+        }
+        return count;
+    }
+    
+    /**
+     * Returns the quietest recorded day.
+     * 
+     * @return quietest day.
+     */
+    public int quietestMonth() {
+        int count = 0;
+        int min = monthCounts[0];
+        for (int index = 1; index < monthCounts.length; index++) {
+            if (monthCounts[index] < min) {
+                min = monthCounts[index];
+                count = index;
+            }
+        }
+        return count;
+    }
+    
     /**
      * Returns the busiest two-hour period recorded.
      * 
@@ -157,8 +214,12 @@ public class LogAnalyzer
             LogEntry entry = reader.next();
             int hour = entry.getHour();
             int day = entry.getDay() - 1; // prevents the quietest day from always being zero.
+            int month = entry.getMonth() - 1;
             if (day >= 0 && day < dayCounts.length) {
                 dayCounts[day]++;
+            }
+            if (month >= 0 && month < monthCounts.length) {
+                monthCounts[month]++;
             }
             hourCounts[hour]++;
         }
